@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Question For You 💌</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7, #ffc1cc);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 48px 40px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    max-width: 420px;
+    width: 90%;
+    position: relative;
+    z-index: 2;
+    animation: pop 0.6s ease;
+  }
+  @keyframes pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  h1 {
+    color: #e0507a;
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .buttons {
+    position: relative;
+    margin-top: 32px;
+    height: 70px;
+  }
+  button {
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.15s ease;
+    touch-action: none;
+  }
+  #yesBtn {
+    background: #ff5c8a;
+    color: white;
+    margin-right: 16px;
+    box-shadow: 0 6px 16px rgba(255, 92, 138, 0.4);
+  }
+  #yesBtn:hover {
+    transform: scale(1.08);
+  }
+  #noBtn {
+    background: #eee;
+    color: #888;
+    position: relative;
+    transition: transform 0.1s ease, left 0.1s ease, top 0.1s ease;
+  }
+  .result {
+    display: none;
+    margin-top: 20px;
+    font-size: 1.4rem;
+    color: #e0507a;
+    font-weight: bold;
+    animation: pop 0.5s ease;
+  }
+  .emoji-rain span {
+    position: fixed;
+    top: -40px;
+    font-size: 1.8rem;
+    animation: fall linear forwards;
+    z-index: 1;
+    pointer-events: none;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+  <p id="question">Will you go out with me tomorrow for your birthday? 🎂</p>
+
+  <div class="buttons" id="buttonWrap">
+    <button id="yesBtn" onclick="pressYes()">Yes 💕</button>
+    <button id="noBtn">No</button>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const noBtn = document.getElementById('noBtn');
+const wrap = document.getElementById('buttonWrap');
+const questionEl = document.getElementById('question');
+const yesBtn = document.getElementById('yesBtn');
+
+function dodge() {
+  const wrapRect = wrap.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  const maxLeft = wrapRect.width - btnRect.width;
+  const maxTop = 250;
+
+  let newLeft = Math.random() * maxLeft;
+  let newTop = (Math.random() * maxTop) - 100;
+
+  noBtn.style.position = 'absolute';
+  noBtn.style.left = newLeft + 'px';
+  noBtn.style.top = newTop + 'px';
+}
+
+noBtn.addEventListener('mouseover', dodge);
+noBtn.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  dodge();
+});
+noBtn.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+  dodge();
+});
+
+const teaseQuestions = [
+  "Are you sure?",
+  "Really sure?",
+  "100% sure?",
+  "Absolutely sure?",
+  "Last chance, sure?"
+];
+
+let step = 0;
+
+function pressYes() {
+  if (step < teaseQuestions.length) {
+    questionEl.textContent = teaseQuestions[step];
+    step++;
+    return;
+  }
+
+  questionEl.style.display = 'none';
+  wrap.style.display = 'none';
+
+  const result = document.getElementById('result');
+  result.style.display = 'block';
+  result.innerHTML = "Hey gorgeous 🌸<br><br>You have no other choice AHAHAHAH 😂🎉<br>See you tomorrow at MSH HA2OLK MOFAG2AA! 🥳";
+
+  const emojis = ['🎉','💖','🥳','🌸','😂','✨'];
+  const rain = document.createElement('div');
+  rain.className = 'emoji-rain';
+  document.body.appendChild(rain);
+
+  for (let i = 0; i < 40; i++) {
+    const span = document.createElement('span');
+    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    span.style.left = Math.random() * 100 + 'vw';
+    span.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    span.style.animationDelay = (Math.random() * 1.5) + 's';
+    rain.appendChild(span);
+  }
+}
+</script>
+
+</body>
+</html>
